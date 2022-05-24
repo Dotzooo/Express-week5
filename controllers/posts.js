@@ -5,7 +5,6 @@ const appError = require('../service/appError')
 
 const posts = {
     async getPosts(req, res, next) {
-        console.log(req.query)
         // 時間排序
         const timeSort = req.query.timeSort == "asc" ? "createdAt" : "-createdAt"
         // 關鍵字
@@ -19,14 +18,16 @@ const posts = {
         handleSuccess(res, allPosts)
     },
 
-    async createPost(req, res, next) {
-        const { body } = req
-        if (body.content) {
+    async createPorst(req, res, next) {
+        const { data } = req.body
+
+        if (data.content) {
             const newPost = await Post.create({
-                name: body.name,
-                content: body.content,
-                tags: body.tags,
-                type: body.type
+                content: data.content,
+                image: data.image,
+                createdAt: data.createdAt,
+                user: data.user,
+                likes: data.likes
             })
             handleSuccess(res, newPost)
         } else {
@@ -36,7 +37,7 @@ const posts = {
 
     async editPost(req, res, next) {
         const { body, params: { id } } = req
-        
+
         const post = await Post.findByIdAndUpdate(id, body)
 
         if (post) {
