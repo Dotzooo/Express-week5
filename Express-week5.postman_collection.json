@@ -6,9 +6,9 @@
 	},
 	"item": [
 		{
-			"name": "取得所有用戶",
+			"name": "登入",
 			"request": {
-				"method": "GET",
+				"method": "POST",
 				"header": [],
 				"url": {
 					"raw": "{{url}}/users",
@@ -23,9 +23,36 @@
 			"response": []
 		},
 		{
-			"name": "登入",
+			"name": "註冊",
 			"request": {
 				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"test@gmail.com\",\r\n    \"name\": \"andy\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/users/signin",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users",
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "取得所有用戶",
+			"request": {
+				"method": "GET",
 				"header": [],
 				"url": {
 					"raw": "{{url}}/users",
@@ -80,7 +107,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"userID\": \"628af3325625388ec1783221\",\r\n    \"name\": \"Adam\",\r\n    \"tags\": \"發文測式\",\r\n    \"type\": \"person\",\r\n    \"image\": \"\",\r\n    \"content\": \"WELCOME TO MY BORAD\"\r\n}",
+					"raw": "{\r\n    \"userID\": \"628af3325625388ec1783221\",\r\n    \"name\": \"Adam\",\r\n    \"tags\": \"發文測式\",\r\n    \"type\": \"person\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -114,13 +141,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{url}}/posts/628bb8861c625a898e77bb3f",
+					"raw": "{{url}}/posts/628bb8861c625a898e77bba",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
 						"posts",
-						"628bb8861c625a898e77bb3f"
+						"628bb8861c625a898e77bba"
 					],
 					"query": [
 						{
