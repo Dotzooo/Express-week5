@@ -1,7 +1,10 @@
-const handleSuccess = require('../service/handleSuccess')
-const Post = require('../models/posts')
-const appError = require('../service/appError')
+const mongoose = require('mongoose')
 
+const User = require('../models/users')
+const Post = require('../models/posts')
+
+const handleSuccess = require('../service/handleSuccess')
+const appError = require('../service/appError')
 
 const posts = {
     async getPosts(req, res, next) {
@@ -18,16 +21,26 @@ const posts = {
         handleSuccess(res, allPosts)
     },
 
-    async createPorst(req, res, next) {
-        const { data } = req.body
+    async createPost(req, res, next) {
+        const { userID, tags, type, content, image } = req.body
+        
+        const isValid = mongoose.Types.ObjectId.isValid(userID)
+        if (!isValid) {
+            return appError(400, '資料錯誤，請重新操作', next)
+        }
 
-        if (data.content) {
+        const isExist = await User.findById(userID)
+        if (!isExist) {
+            return appError(400, '該用戶不存在，請重新操作', next)
+        }
+
+        if (content) {
             const newPost = await Post.create({
-                content: data.content,
-                image: data.image,
-                createdAt: data.createdAt,
-                user: data.user,
-                likes: data.likes
+                user: userID,
+                tags,
+                type,
+                content,
+                image,
             })
             handleSuccess(res, newPost)
         } else {
@@ -36,9 +49,19 @@ const posts = {
     },
 
     async editPost(req, res, next) {
-        const { body, params: { id } } = req
+        const { body: { content, image }, params: { id } } = req
 
-        const post = await Post.findByIdAndUpdate(id, body)
+
+        const ExistPost = await Post.findById(id).exec()
+        if (!ExistPost) {
+            return appError(400, '尚未發布貼文!', next)
+        }
+
+        if (!content) {
+            return appError(400, '請填寫 content', next)
+        }
+
+        const post = await Post.findByIdAndUpdate(id, { content, image }, { new: true })
 
         if (post) {
             handleSuccess(res, post)
@@ -53,7 +76,7 @@ const posts = {
         const post = await Post.findByIdAndDelete(id)
 
         if (post) {
-            handleSuccess(res)
+            handleSuccess(res, '貼文刪除成功')
         } else {
             appError(400, '貼文刪除失敗', next)
         }
@@ -62,7 +85,6 @@ const posts = {
     async deleteAllPosts(req, res, next) {
         const postResult = await Post.deleteMany({})
         handleSuccess(res, postResult)
-        res.end()
     }
 }
 

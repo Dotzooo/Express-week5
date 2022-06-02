@@ -1,9 +1,10 @@
 const mongoose = require('mongoose')
 const postSchema = new mongoose.Schema(
   {
-    name: {
-      type: String,
-      required: [true, '貼文姓名未填寫']
+    user: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User',
+      required: [true, 'User Id 未填寫']
     },
     tags: [
       {
@@ -20,7 +21,7 @@ const postSchema = new mongoose.Schema(
       type: String,
       default: ""
     },
-    createAt: {
+    createdAt: {
       type: Date,
       default: Date.now,
       select: false

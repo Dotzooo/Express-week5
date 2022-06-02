@@ -6,18 +6,18 @@ const PostController = require('../controllers/posts');
 
 
 // 取得所有貼文
-router.get('/', handleErrorAsync((req, res, next) => PostController.getPosts(req, res, next)))
+router.get('/posts', handleErrorAsync(PostController.getPosts))
 
 // 新增貼文
-router.post('/', handleErrorAsync((req, res, next) => PostController.createPost(req, res, next)))
+router.post('/post', handleErrorAsync(PostController.createPost))
 
 // 修改貼文
-router.patch('/:id', handleErrorAsync((req, res, next) => PostController.editPost(req, res, next)))
+router.patch('/post/:id', handleErrorAsync(PostController.editPost))
 
 // 刪除指定貼文
-router.delete('/:id', handleErrorAsync((req, res, next) => PostController.deletePost(req, res, next)))
+router.delete('/post/:id', handleErrorAsync(PostController.deletePost))
 
 // 刪除所有貼文
-router.delete('/', handleErrorAsync((req, res, next) => PostController.deleteAllPosts(req, res, next)))
+router.delete('/posts', handleErrorAsync(PostController.deleteAllPosts))
 
 module.exports = router;
